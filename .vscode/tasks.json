@@ -6,7 +6,7 @@
 		{
 			"type": "shell",
 			"label": "dev-backend",
-			"command": "npm run dev-backend",
+			"command": "npm run dev",
 			"args": [
 				
 			],
