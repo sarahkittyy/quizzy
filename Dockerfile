@@ -9,8 +9,7 @@ WORKDIR /app
 RUN apt-get update -y
 
 # install node & npm
-RUN apt install -y nodejs
-RUN apt install -y npm
+RUN apt install -y nodejs npm
 
 RUN npm install
 
