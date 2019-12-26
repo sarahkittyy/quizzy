@@ -28,8 +28,9 @@ module.exports = {
 	target: 'web',
 	devServer: {
 		proxy: {
-			'**': 'http://localhost:' + process.env.API_PORT,
+			'**': `http://${process.env.APP_URL}:${process.env.API_PORT}`,
 		},
+		host: process.env.APP_URL,
 		port: process.env.WEB_PORT,
 		writeToDisk: true,
 	},

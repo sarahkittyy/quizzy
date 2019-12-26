@@ -5,7 +5,7 @@ export interface HomeProps {
 }
 
 const Home: SFC<HomeProps> = (props) => {
-	return <>owo</>;
+	return <>owu</>;
 };
 
 export default Home;
