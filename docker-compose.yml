@@ -7,3 +7,7 @@ services:
     - "3001:3001"
    volumes:
     - ./:/app
+   links:
+    - db
+  db:
+   image: mongo:3.4.23-xenial
