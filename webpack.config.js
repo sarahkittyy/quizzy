@@ -28,7 +28,7 @@ module.exports = {
 		]
 	},
 	resolve: {
-		extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+		extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.css'],
 	},
 	target: 'web',
 	devServer: {
