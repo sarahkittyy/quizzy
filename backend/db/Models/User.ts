@@ -26,6 +26,7 @@ UserSchema.static('hash', function (pass: string): string {
 
 UserSchema.static('validate', async function (user: string, pass: string): Promise<boolean> {
 	let userModel = await this.model('User').findOne({username: user}, 'password');
+	if(!userModel) { return false; }
 	return await bcrypt.compare(pass, userModel.password);
 });
 

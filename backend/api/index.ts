@@ -67,6 +67,8 @@ api.get('/login', [
 	let validated = await User.validate(username, password);
 	if(validated) {
 		req.session.authorizedUntil = moment().add(1, 'week').valueOf();
+		let user = await User.findOne({username: username});
+		req.session.userID = user.id;
 		return res.json({success: true});
 	} else {
 		return res.status(401).json({errors: ['Invalid username or password']});
@@ -75,7 +77,31 @@ api.get('/login', [
 
 api.get('/logout', async (req: Request, res: Response) => {
 	req.session.authorizedUntil = null;
+	req.session.userID = null;
 	return res.json({errors: []});
+});
+
+api.post('/changeUsername', [
+	check('username').matches(/^[A-Za-z0-9_ @!$]{3,}$/),
+], auth, async (req: Request, res: Response) => {
+	// validate req
+	const errors = validationResult(req);
+	if(!errors.isEmpty()) {
+		return res.status(422).json({errors: errors.array()});
+	}
+	
+	// change the username
+	User.findByIdAndUpdate(req.session.userID, {username: req.body.username})
+	.catch((err) => {
+		res.status(500).json({errors: [err]});
+	})
+	.then(() => {
+		res.json({errors: []});
+	});
+});
+
+api.all('*', (req, res) => {
+	res.status(404).json({errors: ['API endpoint not found.']});
 });
 
 export default api;
