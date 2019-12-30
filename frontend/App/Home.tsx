@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, Grid, IconButton, Drawer } from '@material
 import { Brightness4Outlined as Sun } from '@material-ui/icons'
 import ProfileButton from '../Components/ProfileButton';
 import history from '../History';
+import SideDrawer from '../Components/SideDrawer';
 
 export interface HomeProps {
 	toggleTheme: () => void;
@@ -26,11 +27,8 @@ class Home extends Component<HomeProps, HomeState> {
 	}
 	
 	public render() {
-	
 		return <>
-			<Drawer anchor="left" open={this.state.sidebarOpen} onClose={() => this.setState({...this.state, sidebarOpen: false})}>
-				OwO
-			</Drawer>
+			<SideDrawer anchor="left" open={this.state.sidebarOpen} onClose={() => this.setState({...this.state, sidebarOpen: false})} />
 			<AppBar position="static">
 				<Toolbar>
 					<Grid container justify="flex-start">
@@ -47,7 +45,6 @@ class Home extends Component<HomeProps, HomeState> {
 				</Toolbar>
 			</AppBar>
 		</>;
-		
 	}
 };
 
