@@ -13,7 +13,7 @@ api.get('/', (req, res) => {
 });
 
 api.post('/signup', [
-	check('username').matches(/^[A-Za-z0-9_ @!$]{3,}$/),
+	check('username').matches(/^[A-Za-z0-9_@!$]{3,}$/),
 	check('password').isLength({min: 5}).matches(/[A-Z]/).matches(/[a-z]/).matches(/[0-9]/),
 ], async (req: Request, res: Response) => {
 	// validate request
@@ -47,7 +47,7 @@ api.get('/authExpires', async (req: Request, res: Response) => {
 	return res.json({authorized: expires > moment(), for: expires.fromNow()});
 });
 
-api.get('/login', [
+api.post('/login', [
 	check('username'),
 	check('password'),
 ], async (req: Request, res: Response) => {
