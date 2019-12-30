@@ -1,7 +1,9 @@
 import React, { SFC } from 'react';
 import { Drawer, List, ListItem, ListItemIcon, Typography, Button, Divider, Avatar, ListItemAvatar } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
-import { Settings, Person } from '@material-ui/icons';
+import { Settings, Person, ExitToApp } from '@material-ui/icons';
+import DrawerButton from '../Components/DrawerButton';
+import $ from 'jquery';
 
 export interface SideDrawerProps {
 	open: boolean;
@@ -18,22 +20,24 @@ const useStyles = makeStyles({
 const SideDrawer: SFC<SideDrawerProps> = (props) => {
 	const classes = useStyles({});
 	
+	const logout = () => {
+		$.ajax({
+			method: 'GET',
+			url: '/api/logout',
+		})
+		.done(() => {
+			window.location.reload();
+		});
+	};
+	
 	return <Drawer open={props.open} onClose={props.onClose} anchor={props.anchor}>
 		<div className={classes.drawer}>
 			<List>
-				{[['Profile', <Person />], ['Settings', <Settings />]].map(([opt, icon]: [string, JSX.Element], index) => (
-				<div key={index} style={{width: '100%'}}>
-					<Button style={{width: '100%'}}>
-						<ListItemIcon>{icon}</ListItemIcon>
-						<ListItem>
-							<Typography component="p">{opt}</Typography>
-						</ListItem>	
-					</Button>
-					<br />
-				</div>
-				))}
+				<DrawerButton icon={<Person />} text="Profile" />
+				<DrawerButton icon={<Settings />} text="Settings" />
+				<Divider />
+				<DrawerButton icon={<ExitToApp />} text="Logout" onClick={logout} />
 			</List>
-			<Divider />
 		</div>
 	</Drawer>;
 };
