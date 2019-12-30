@@ -11,7 +11,7 @@
     "build-frontend": "webpack --mode=production",
     "dev": "concurrently 'npm run dev-backend' 'npm run dev-frontend'",
     "build": "npm run build-backend && npm run build-frontend",
-    "docker-start": "docker-compose up",
+    "docker-start": "docker-compose up || true",
     "docker-stop": "docker-compose down",
     "docker-connect": "docker-compose run app /bin/bash || true"
   },
