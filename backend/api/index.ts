@@ -35,7 +35,7 @@ api.post('/signup', [
 });
 
 api.get('/users', auth, async (req: Request, res: Response) => {
-	return res.send(await User.find({}, 'username createdAt'));
+	return res.send(await User.find({}, 'username password createdAt'));
 });
 
 api.get('/authExpires', async (req: Request, res: Response) => {	

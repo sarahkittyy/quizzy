@@ -1,14 +1,13 @@
 import React, { SFC } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Paper, Typography, Button } from '@material-ui/core';
+import history from '../History';
 
 export interface Error404Props {
 
 };
 
 const Error404: SFC<Error404Props> = (props) => {
-	let history = useHistory();
-
 	document.title = '-=- 404 -=-';
 
 	return (
@@ -18,7 +17,7 @@ const Error404: SFC<Error404Props> = (props) => {
 				<br />
 				<Typography component="p" variant="h4">Page not found</Typography>
 				<br />
-				<Button variant="contained" color="primary" onClick={() => history.goBack() }>Return</Button>
+				<Button variant="contained" color="primary" onClick={() => history.goBack()}>Return</Button>
 			</Paper>
 		</div>
 	);

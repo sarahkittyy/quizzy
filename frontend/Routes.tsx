@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Link, Redirect, Switch } from 'react-router-dom';
+import { Router, Route, Redirect, Switch } from 'react-router-dom';
 import Home from './App/Home';
 import Error404 from './App/Error404';
+import history from './History';
 
 export interface RoutesProps {
 	toggleTheme: () => void;	
@@ -9,7 +10,7 @@ export interface RoutesProps {
 
 export default (props: RoutesProps) => {
 	return (
-		<BrowserRouter>
+		<Router history={history}>
 			<Switch>
 				<Route exact path="/">
 					<Redirect to="/home" />
@@ -17,7 +18,7 @@ export default (props: RoutesProps) => {
 				<Route path="/home" render={() => <Home toggleTheme={props.toggleTheme} />} />
 				<Route component={Error404} />
 			</Switch>
-		</BrowserRouter>
+		</Router>
 	);
 
 };
