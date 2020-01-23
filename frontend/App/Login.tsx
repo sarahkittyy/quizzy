@@ -30,7 +30,16 @@ class Login extends Component<LoginProps, LoginState> {
 		document.title = '-=- Login -=-';
 	}
 	
+	private removeErrorOnRetry() {
+		this.setState({
+			...this.state,
+			invalidUsername: false,
+			invalidPassword: false,
+		});
+	}
+	
 	private login = () => {
+		this.removeErrorOnRetry();
 		$.ajax({
 			method: 'POST',
 			url: '/api/login',
@@ -46,6 +55,7 @@ class Login extends Component<LoginProps, LoginState> {
 	}
 	
 	private signup = () => {
+		this.removeErrorOnRetry();
 		$.ajax({
 			method: 'POST',
 			url: '/api/signup',
@@ -63,13 +73,10 @@ class Login extends Component<LoginProps, LoginState> {
 			let errors: [any] = res.responseJSON.errors;
 			if(errors.find(v => v.param === 'username')) {
 				this.setState({...this.state, invalidUsername: true});
-				return;
 			}
-			if (errors.find(v => v.param === 'password')) {
+			else if (errors.find(v => v.param === 'password')) {
 				this.setState({...this.state, invalidPassword: true});
-				return;
 			}
-			this.setState({...this.state, invalidUsername: true});
 		})
 		.done(res => {
 			this.login();

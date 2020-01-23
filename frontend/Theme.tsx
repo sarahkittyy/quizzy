@@ -4,7 +4,9 @@ import { ThemeOptions } from '@material-ui/core/styles/createMuiTheme';
 const lightTheme: ThemeOptions = {
 	palette: {
 		type: 'light',
-		primary: color.pink,
+		primary: {
+			main: '#f533da',
+		},
 		secondary: color.yellow,
 	},
 };
