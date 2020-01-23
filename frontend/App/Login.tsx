@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Paper, Typography, Divider, InputLabel, TextField, Grid, Button } from '@material-ui/core';
 import $ from 'jquery';
 import history from '../History';
+import { ref as Notify } from '../Notifs';
 
 export interface LoginProps {
-		
 };
 
 export interface LoginState {
@@ -16,9 +16,10 @@ export interface LoginState {
 };
 
 class Login extends Component<LoginProps, LoginState> {
-	public constructor(props) {
+	
+	public constructor(props: LoginProps) {
 		super(props);
-		
+
 		this.state = {
 			username: '',
 			password: '',
