@@ -12,6 +12,7 @@ export interface LoginState {
 	password: string;
 	invalidUsername: boolean;
 	invalidPassword: boolean;
+	working: boolean;
 };
 
 class Login extends Component<LoginProps, LoginState> {
@@ -23,6 +24,7 @@ class Login extends Component<LoginProps, LoginState> {
 			password: '',
 			invalidUsername: false,
 			invalidPassword: false,
+			working: false,
 		};
 	}
 	
@@ -40,6 +42,7 @@ class Login extends Component<LoginProps, LoginState> {
 	
 	private login = () => {
 		this.removeErrorOnRetry();
+		this.setState({...this.state, working: true});
 		$.ajax({
 			method: 'POST',
 			url: '/api/login',
@@ -49,6 +52,18 @@ class Login extends Component<LoginProps, LoginState> {
 			}),
 			contentType: 'application/json',
 		})
+		.fail(res => {
+			let errors: [any] = res.responseJSON.errors;
+			alert(errors[0]);
+			console.log(errors);
+			if(errors.find(v => v.includes('username'))) {
+				this.setState({...this.state, invalidUsername: true});
+			}
+			if (errors.find(v => v.includes('password'))) {
+				this.setState({...this.state, invalidPassword: true});
+			}
+			this.setState({...this.state, working: false});
+		})
 		.done(res => {
 			history.push('/home');
 		});
@@ -56,6 +71,7 @@ class Login extends Component<LoginProps, LoginState> {
 	
 	private signup = () => {
 		this.removeErrorOnRetry();
+		this.setState({...this.state, working: true});
 		$.ajax({
 			method: 'POST',
 			url: '/api/signup',
@@ -71,10 +87,11 @@ class Login extends Component<LoginProps, LoginState> {
 				return;
 			}
 			let errors: [any] = res.responseJSON.errors;
+			alert(errors[0]);
 			if(errors.find(v => v.param === 'username')) {
 				this.setState({...this.state, invalidUsername: true});
 			}
-			else if (errors.find(v => v.param === 'password')) {
+			if (errors.find(v => v.param === 'password')) {
 				this.setState({...this.state, invalidPassword: true});
 			}
 		})
@@ -111,12 +128,19 @@ class Login extends Component<LoginProps, LoginState> {
 				<Divider style={{margin: '5px'}} />
 				<Button
 					variant="contained"
+					disabled={this.state.working}
 					color="secondary"
 					onClick={this.signup}
 					style={{marginRight: '5px'}}>
 						Sign Up
 				</Button>
-				<Button variant="contained" color="secondary" onClick={this.login}>Login</Button>
+				<Button
+					variant="contained"
+					disabled={this.state.working}
+					color="secondary"
+					onClick={this.login}>
+						Login
+				</Button>
 			</Paper>
 		</div>;
 	}
