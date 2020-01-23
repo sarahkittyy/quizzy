@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Paper, Typography, Divider, InputLabel, TextField, Grid, Button } from '@material-ui/core';
 import $ from 'jquery';
 import history from '../History';
+import { ref as Notify } from '../Notifs';
 
 export interface LoginProps {
-		
 };
 
 export interface LoginState {
@@ -16,9 +16,10 @@ export interface LoginState {
 };
 
 class Login extends Component<LoginProps, LoginState> {
-	public constructor(props) {
+	
+	public constructor(props: LoginProps) {
 		super(props);
-		
+
 		this.state = {
 			username: '',
 			password: '',
@@ -32,17 +33,17 @@ class Login extends Component<LoginProps, LoginState> {
 		document.title = '-=- Login -=-';
 	}
 	
-	private removeErrorOnRetry() {
+	private onRetry() {
 		this.setState({
 			...this.state,
 			invalidUsername: false,
 			invalidPassword: false,
+			working: true,
 		});
 	}
 	
 	private login = () => {
-		this.removeErrorOnRetry();
-		this.setState({...this.state, working: true});
+		this.onRetry();
 		$.ajax({
 			method: 'POST',
 			url: '/api/login',
@@ -54,8 +55,13 @@ class Login extends Component<LoginProps, LoginState> {
 		})
 		.fail(res => {
 			let errors: [any] = res.responseJSON.errors;
-			alert(errors[0]);
-			console.log(errors);
+			Notify.current.addNotification({
+				message: `Could not login: ${errors[0]}`,
+				level: 'error',
+				position: 'tc',
+				title: 'An error occured',
+			})
+			console.error(errors);
 			if(errors.find(v => v.includes('username'))) {
 				this.setState({...this.state, invalidUsername: true});
 			}
@@ -70,8 +76,7 @@ class Login extends Component<LoginProps, LoginState> {
 	}
 	
 	private signup = () => {
-		this.removeErrorOnRetry();
-		this.setState({...this.state, working: true});
+		this.onRetry();
 		$.ajax({
 			method: 'POST',
 			url: '/api/signup',
@@ -83,11 +88,21 @@ class Login extends Component<LoginProps, LoginState> {
 		})
 		.fail(res => {
 			if (res.status === 409) {
-				alert('Username already taken!');
+				Notify.current.addNotification({
+					level: 'warning',
+					title: 'An error occured',
+					message: 'That username is already taken.',
+					position: 'tc',
+				});
 				return;
 			}
 			let errors: [any] = res.responseJSON.errors;
-			alert(errors[0]);
+			Notify.current.addNotification({
+				message: `Could not sign up: ${errors[0]}`,
+				level: 'error',
+				position: 'tc',
+				title: 'An error occured',
+			});
 			if(errors.find(v => v.param === 'username')) {
 				this.setState({...this.state, invalidUsername: true});
 			}
