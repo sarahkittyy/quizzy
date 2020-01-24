@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import '../db/init';
 import auth from './auth';
+import quiz from './quiz';
 import authMiddleware from '../middleware/auth';
 import User from '../db/Models/User';
 
@@ -8,6 +9,7 @@ const api = express.Router();
 
 // Authentication endpoint
 api.use('/auth', auth);
+api.use('/quiz', quiz);
 
 /**
  * @brief Retrieves a list of all users.
