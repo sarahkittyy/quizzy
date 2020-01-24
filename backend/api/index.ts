@@ -12,6 +12,9 @@ api.get('/', (req, res) => {
 	res.send('owo');
 });
 
+/**
+ * @brief Creates a new account.
+ */
 api.post('/signup', [
 	check('username').matches(/^[A-Za-z0-9_@!$]{3,}$/),
 	check('password').isLength({min: 5}).matches(/[A-Z]/).matches(/[a-z]/).matches(/[0-9]/),
@@ -34,10 +37,16 @@ api.post('/signup', [
 	return res.json({success: true});
 });
 
+/**
+ * @brief Retrieves a list of all users.
+ */
 api.get('/users', auth, async (req: Request, res: Response) => {
 	return res.send(await User.find({}, 'username password createdAt'));
 });
 
+/**
+ * @brief Checks how long auth will last for
+ */
 api.get('/authExpires', async (req: Request, res: Response) => {	
 	if(!req.session.authorizedUntil) {
 		return res.json({authorized: false, for: undefined});
@@ -47,6 +56,9 @@ api.get('/authExpires', async (req: Request, res: Response) => {
 	return res.json({authorized: expires > moment(), for: expires.fromNow()});
 });
 
+/**
+ * @brief Logs in the user with the given username and password
+ */
 api.post('/login', [
 	check('username'),
 	check('password'),
@@ -75,12 +87,18 @@ api.post('/login', [
 	}
 });
 
+/**
+ * @brief Clears the user auth session tokens 
+ */
 api.get('/logout', async (req: Request, res: Response) => {
 	req.session.authorizedUntil = null;
 	req.session.userID = null;
 	return res.json({errors: []});
 });
 
+/**
+ * @brief Allows a user to change their username
+ */
 api.post('/changeUsername', [
 	check('username').matches(/^[A-Za-z0-9_ @!$]{3,}$/),
 ], auth, async (req: Request, res: Response) => {
@@ -100,6 +118,9 @@ api.post('/changeUsername', [
 	});
 });
 
+/**
+ * @brief Fallback endpoint
+ */
 api.all('*', (req, res) => {
 	res.status(404).json({errors: ['API endpoint not found.']});
 });
