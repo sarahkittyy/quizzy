@@ -83,7 +83,9 @@ class QuizCard extends Component<QuizCardProps, QuizCardState> {
 				onClick={this.onClick}>
 				<div style={{ padding: '8px' }}>
 					<span style={{ textAlign: 'center' }}>
-						<Typography component="h1" variant="h3">{this.props.quiz.name}</Typography>
+						<Typography component="h1" variant="h3">
+							{this.props.quiz.name}
+						</Typography>
 					</span>
 					<span style={{ textAlign: 'left' }}>
 						<Typography component="p">
