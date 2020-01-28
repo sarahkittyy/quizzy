@@ -16,13 +16,12 @@ api.use('/quiz', quiz);
  */
 api.get('/users', async (req: Request, res: Response) => {
 	if(req.query.id) {
-		return res.send(await User.findById(req.query.id, 'username createdAt'));
+		return res.send(await User.findById(req.query.id, 'username permissions createdAt'));
 	}
 	else {
-		return res.send(await User.find({}, 'username createdAt'));
+		return res.send(await User.find({}, 'username permissions createdAt'));
 	}
 });
-
 
 /**
  * @brief Fallback endpoint
