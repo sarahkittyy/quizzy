@@ -1,16 +1,9 @@
 import mongoose from 'mongoose';
-
-interface Question {
-	question: string;
-	answers: [string];
-	createdAt: Date;
-	updatedAt: Date;
-	correct: [number];
-}
+import Question, { QuestionSchema, IQuestion } from './Question';
 
 interface IQuiz extends mongoose.Document {
 	authorID: string;
-	questions: [Question]
+	questions: [IQuestion]
 }
 
 interface IQuizStatic extends mongoose.Model<IQuiz> {
@@ -19,7 +12,7 @@ interface IQuizStatic extends mongoose.Model<IQuiz> {
 
 const QuizSchema = new mongoose.Schema({
 	authorID: String,
-	qusetions: String,
+	questions: [Question],
 }, { timestamps: true });
 
 const Quiz = mongoose.model<IQuiz, IQuizStatic>('Quiz', QuizSchema);
