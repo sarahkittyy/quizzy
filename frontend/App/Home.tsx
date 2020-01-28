@@ -72,9 +72,19 @@ class Home extends Component<HomeProps, HomeState> {
 					</Grid>
 				</Toolbar>
 			</AppBar>
-			{ this.state.quizzes.map((quiz, i) => {
-				return <div key={i} style={{ width: '100%', margin: 'auto', alignItems: 'center' }}>
-					<QuizCard quiz={quiz}></QuizCard>
+			{ this.state.quizzes.map(quiz => {
+				return <div key={quiz._id} style={{ width: '100%', margin: 'auto', alignItems: 'center' }}>
+					<QuizCard
+						quiz={quiz}
+						deleteThis={() => {
+							setTimeout(() => {
+								this.setState({
+									...this.state,
+									quizzes: this.state.quizzes.filter(q => q._id !== quiz._id),
+								});
+							}, 1000);
+						}}
+						/>
 				</div>;
 			}) }
 		</>;
