@@ -23,7 +23,7 @@ const SideDrawer: SFC<SideDrawerProps> = (props) => {
 	const logout = () => {
 		$.ajax({
 			method: 'GET',
-			url: '/api/logout',
+			url: '/api/auth/logout',
 		})
 		.done(() => {
 			window.location.reload();
