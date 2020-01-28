@@ -20,6 +20,7 @@ quiz.post('/new', [
 		});
 		return true;
 	}),
+	check('name').isString()
 ], async (req: Request, res: Response) => {
 	//* Validate input
 	const errors = validationResult(req);
@@ -37,6 +38,7 @@ quiz.post('/new', [
 		quiz.questions.push(question);
 	});
 	quiz.authorID = req.session.userID;
+	quiz.name = req.body.name;
 	quiz.save();
 	
 	return res.json({success: true});

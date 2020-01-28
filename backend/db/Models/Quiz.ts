@@ -3,6 +3,7 @@ import Question, { QuestionSchema, IQuestion } from './Question';
 
 interface IQuiz extends mongoose.Document {
 	authorID: string;
+	name: string;
 	questions: [IQuestion]
 }
 
@@ -12,6 +13,7 @@ interface IQuizStatic extends mongoose.Model<IQuiz> {
 
 const QuizSchema = new mongoose.Schema({
 	authorID: String,
+	name: String,
 	questions: [QuestionSchema],
 }, { timestamps: true });
 
