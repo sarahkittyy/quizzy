@@ -15,7 +15,12 @@ api.use('/quiz', quiz);
  * @brief Retrieves a list of all users.
  */
 api.get('/users', async (req: Request, res: Response) => {
-	return res.send(await User.find({}, 'username createdAt'));
+	if(req.query.id) {
+		return res.send(await User.findById(req.query.id, 'username createdAt'));
+	}
+	else {
+		return res.send(await User.find({}, 'username createdAt'));
+	}
 });
 
 
