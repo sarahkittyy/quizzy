@@ -5,6 +5,8 @@ import ProfileButton from '../Components/ProfileButton';
 import history from '../History';
 import SideDrawer from '../Components/SideDrawer';
 import $ from 'jquery';
+import IQuiz from '../Util/IQuiz';
+import QuizCard from '../Components/QuizCard';
 
 export interface HomeProps {
 	toggleTheme: () => void;
@@ -13,6 +15,7 @@ export interface HomeProps {
 export interface HomeState {
 	sidebarOpen: boolean;
 	loggedIn: boolean;
+	quizzes: IQuiz[];
 };
 
 class Home extends Component<HomeProps, HomeState> {
@@ -22,6 +25,7 @@ class Home extends Component<HomeProps, HomeState> {
 		this.state = {
 			sidebarOpen: false,
 			loggedIn: false,
+			quizzes: [],
 		};
 	}
 	
@@ -30,9 +34,16 @@ class Home extends Component<HomeProps, HomeState> {
 		
 		$.ajax({
 			method: 'GET',
-			url: '/api/auth/authExpires'
+			url: '/api/auth/authExpires',
 		}).then((res) => {
 			this.setState({...this.state, loggedIn: res.authorized});
+		});
+		
+		$.ajax({
+			method: 'GET',
+			url: '/api/quiz/get',
+		}).then((res) => {
+			this.setState({...this.state, quizzes: res});
 		});
 	}
 	
@@ -61,6 +72,11 @@ class Home extends Component<HomeProps, HomeState> {
 					</Grid>
 				</Toolbar>
 			</AppBar>
+			{ this.state.quizzes.map((quiz, i) => {
+				return <div key={i} style={{ width: '100%', margin: 'auto', alignItems: 'center' }}>
+					<QuizCard quiz={quiz}></QuizCard>
+				</div>;
+			}) }
 		</>;
 	}
 };
