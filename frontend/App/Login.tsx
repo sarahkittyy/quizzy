@@ -109,6 +109,7 @@ class Login extends Component<LoginProps, LoginState> {
 			if (errors.find(v => v.param === 'password')) {
 				this.setState({...this.state, invalidPassword: true});
 			}
+			this.setState({...this.state, working: false});
 		})
 		.done(res => {
 			this.login();
