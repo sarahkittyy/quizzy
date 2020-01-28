@@ -7,6 +7,9 @@ import { isArray } from 'util';
 
 const quiz = express.Router();
 
+/**
+ * @brief Post a new quiz
+ */
 quiz.post('/new', [
 	authMiddleware,
 	check('questions').custom(qs => {
@@ -44,6 +47,9 @@ quiz.post('/new', [
 	return res.json({success: true});
 });
 
+/**
+ * @brief Retrieve a list of all quizzes.
+ */
 quiz.get('/get', async (req: Request, res: Response) => {
 	return res.send(await Quiz.find({}));
 });
