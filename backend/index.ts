@@ -17,6 +17,9 @@ app.use('/api', api);
 app.get('/bundle.js', (req, res) => {
 	res.sendFile(appRoot.resolve('build/frontend/bundle.js'));
 });
+app.use('/favicon.ico', (req, res) => {
+	res.sendFile(appRoot.resolve('public/favicon.ico'))
+});
 
 app.get('/*', (req, res) => {
 	res.sendFile(appRoot.resolve('public/index.html'));
