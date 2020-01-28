@@ -6,7 +6,6 @@ interface Question {
 	createdAt: Date;
 	updatedAt: Date;
 	correct: [number];
-	multi: boolean; // can the question have more than one answer?
 }
 
 interface IQuiz extends mongoose.Document {
