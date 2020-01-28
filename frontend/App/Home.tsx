@@ -30,7 +30,7 @@ class Home extends Component<HomeProps, HomeState> {
 		
 		$.ajax({
 			method: 'GET',
-			url: '/api/authExpires'
+			url: '/api/auth/authExpires'
 		}).then((res) => {
 			this.setState({...this.state, loggedIn: res.authorized});
 		});

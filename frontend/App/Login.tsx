@@ -46,7 +46,7 @@ class Login extends Component<LoginProps, LoginState> {
 		this.onRetry();
 		$.ajax({
 			method: 'POST',
-			url: '/api/login',
+			url: '/api/auth/login',
 			data: JSON.stringify({
 				username: this.state.username,
 				password: this.state.password,
@@ -79,7 +79,7 @@ class Login extends Component<LoginProps, LoginState> {
 		this.onRetry();
 		$.ajax({
 			method: 'POST',
-			url: '/api/signup',
+			url: '/api/auth/signup',
 			data: JSON.stringify({
 				username: this.state.username,
 				password: this.state.password,
