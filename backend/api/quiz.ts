@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import Quiz from '../db/Models/Quiz';
+import Quiz, { IQuiz } from '../db/Models/Quiz';
 import Question, { IQuestion } from '../db/Models/Question';
 import { check, validationResult } from 'express-validator';
 import authMiddleware from '../middleware/auth';
@@ -28,7 +28,7 @@ quiz.post('/new', [
 	//* Validate input
 	const errors = validationResult(req);
 	if(!errors.isEmpty()) {
-		return res.status(422).json({errors: errors.array()});
+		return res.status(400).json({errors: errors.array()});
 	}
 	
 	const quiz = new Quiz;
@@ -52,6 +52,27 @@ quiz.post('/new', [
  */
 quiz.get('/get', async (req: Request, res: Response) => {
 	return res.send(await Quiz.find({}));
+});
+
+/**
+ * @brief Delete a quiz from the server.
+ */
+quiz.delete('/delete', [
+	check('id').isString()
+], async (req: Request, res: Response) => {
+	//* Check validator
+	const errors = validationResult(req);
+	if(!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+	
+	let success = await Quiz.deleteOne({ _id: req.body.id });
+	if (success.deletedCount === 0) {
+		return res.status(404).json({ errors: ['Quiz not found.']});
+	}
+	else {
+		return res.status(200).json({ success: true });
+	}
 });
 
 export default quiz;
