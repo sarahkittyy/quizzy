@@ -12,7 +12,7 @@ interface IQuizStatic extends mongoose.Model<IQuiz> {
 
 const QuizSchema = new mongoose.Schema({
 	authorID: String,
-	questions: [Question],
+	questions: [QuestionSchema],
 }, { timestamps: true });
 
 const Quiz = mongoose.model<IQuiz, IQuizStatic>('Quiz', QuizSchema);
