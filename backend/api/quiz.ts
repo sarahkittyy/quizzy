@@ -1,9 +1,10 @@
 import express, { Request, Response } from 'express';
 import Quiz, { IQuiz } from '../db/Models/Quiz';
 import Question, { IQuestion } from '../db/Models/Question';
-import { check, validationResult } from 'express-validator';
+import { check, validationResult, query } from 'express-validator';
 import authMiddleware from '../middleware/auth';
 import { isArray } from 'util';
+import User from '../db/Models/User';
 
 const quiz = express.Router();
 
@@ -58,7 +59,8 @@ quiz.get('/get', async (req: Request, res: Response) => {
  * @brief Delete a quiz from the server.
  */
 quiz.delete('/delete', [
-	check('id').isString()
+	authMiddleware,
+	query('id').isString()
 ], async (req: Request, res: Response) => {
 	//* Check validator
 	const errors = validationResult(req);
@@ -66,13 +68,33 @@ quiz.delete('/delete', [
 		return res.status(400).json({ errors: errors.array() });
 	}
 	
-	let success = await Quiz.deleteOne({ _id: req.body.id });
-	if (success.deletedCount === 0) {
-		return res.status(404).json({ errors: ['Quiz not found.']});
-	}
-	else {
+	let quiz = await Quiz.findById(req.query.id);
+	if(!!quiz && quiz.canDelete(req.session.userID)) {
+		await Quiz.findByIdAndDelete(req.query.id);
 		return res.status(200).json({ success: true });
 	}
+	else {
+		return res.status(404).json({ errors: ['Quiz not found.']});
+	}
+});
+
+/**
+ * @brief Check if we can delete the given quiz
+ */
+quiz.get('/canDelete', [
+	authMiddleware,
+	query('id').isString(),
+], async (req: Request, res: Response) => {
+	//* Check validator
+	const errors = validationResult(req);
+	if(!errors.isEmpty()) {
+		return res.status(400).json({ errors: errors.array() });
+	}
+
+	let quiz = await Quiz.findById(req.query.id);
+	if(!quiz) { return res.status(404).json({errors: ['Cannot find quiz']}); }
+	
+	return res.status(200).json({allowed: quiz.canDelete(req.session.userID)});
 });
 
 export default quiz;
