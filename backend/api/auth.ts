@@ -105,4 +105,5 @@ auth.post('/changeUsername', [
 	});
 });
 
+
 export default auth;
