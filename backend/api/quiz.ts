@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import Quiz from '../db/Models/Quiz';
+import Question, { IQuestion } from '../db/Models/Question';
 import { check, validationResult } from 'express-validator';
 import authMiddleware from '../middleware/auth';
 import { isArray } from 'util';
@@ -19,7 +20,29 @@ quiz.post('/new', [
 		});
 	}),
 ], async (req: Request, res: Response) => {
-	return res.send('placeholder');
+	//* Validate input
+	const errors = validationResult(req);
+	if(!errors.isEmpty()) {
+		return res.status(422).json({errors: errors.array()});
+	}
+	
+	const quiz = new Quiz;
+	let questions: [IQuestion] = req.body.questions;
+	questions.forEach(q => {
+		const question = new Question;
+		question.question = q.question;
+		question.answers = q.answers;
+		question.correct = q.correct;
+		quiz.questions.push(question);
+	});
+	quiz.authorID = req.session.userID;
+	quiz.save();
+	
+	return res.json({success: true});
+});
+
+quiz.get('/get', async (req: Request, res: Response) => {
+	return res.send(await Quiz.find({}));
 });
 
 export default quiz;
