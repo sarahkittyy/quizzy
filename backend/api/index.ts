@@ -14,8 +14,8 @@ api.use('/quiz', quiz);
 /**
  * @brief Retrieves a list of all users.
  */
-api.get('/users', authMiddleware, async (req: Request, res: Response) => {
-	return res.send(await User.find({}, 'username password createdAt'));
+api.get('/users', async (req: Request, res: Response) => {
+	return res.send(await User.find({}, 'username createdAt'));
 });
 
 
