@@ -18,6 +18,7 @@ quiz.post('/new', [
 			if(!q.correct ||
 				q.correct.length < 1) throw 'no correct answer provided';
 		});
+		return true;
 	}),
 ], async (req: Request, res: Response) => {
 	//* Validate input
